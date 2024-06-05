@@ -4,94 +4,94 @@ export let personnelColonneTable : Cols[] = [
     {field: 'photo', header: 'Photo'},
     {field: 'nni', header: 'NNI'},
     {field: 'matricule', header: 'Matricule'},
-    {field: 'nometprenom', header: 'Nom et prénom'},
-    {field: 'nometprenomarab', header: 'Nom et prénom Arab'},
+    {field: 'nomPrenom', header: 'Nom et prénom'},
+    {field: 'nomPrenomArab', header: 'Nom et prénom Arab'},
     {field: 'tlphone', header: 'Téléphone'},
-    {field: 'adrssemp', header: 'Adresse'},
-    {field: 'dtenaiss', header: 'Date naissance'},
-    {field: 'lieunaiss', header: 'Lieu naissance'},
-    {field: 'dterecrutmnt', header: 'Date recrutement'},
-    {field: 'dtetitularisation', header: 'Date titularisation'},
-    {field: 'debucntrat', header: 'Début contrat'},
-    {field: 'fincntrat', header: 'Fin contrat'},
+    {field: 'adrssEmp', header: 'Adresse'},
+    {field: 'dteNaiss', header: 'Date naissance'},
+    {field: 'lieuNaiss', header: 'Lieu naissance'},
+    {field: 'dteRecrutmnt', header: 'Date recrutement'},
+    {field: 'dteTitularisation', header: 'Date titularisation'},
+    {field: 'debuCntrat', header: 'Début contrat'},
+    {field: 'finCntrat', header: 'Fin contrat'},
     {field: 'bank', header: 'Banque'},
-    {field: 'codbank', header: 'Code banque'},
-    {field: 'numrocpte', header: 'Numéro compte'},
-    {field: 'clerib', header: 'Clé rib'},
+    {field: 'codeBank', header: 'Code banque'},
+    {field: 'numroCpte', header: 'Numéro compte'},
+    {field: 'cleRib', header: 'Clé rib'},
     {field: 'detacher', header: 'Détacher'},
-    {field: 'ministereorigine', header: 'Ministère origine'},
-    {field: 'Typeeducation', header: 'Type éducation'},
-    {field: 'statusemp', header: 'Statut employé'},
-    {field: 'actifornot', header: 'Situation'}
+    {field: 'ministereOrigine', header: 'Ministère origine'},
+    {field: 'typeEducation', header: 'Type éducation'},
+    {field: 'statusEmp', header: 'Statut employé'},
+    {field: 'actiformot', header: 'Situation'}
 ];
 
 export interface PersonnelRequest {
 
-    // Matricule du personnel (probablement une chaîne de caractères)
-    matricule: string;
-
-    // Numéro d'identification nationale (probablement une chaîne de caractères)
-    nni: string;
-
-    // Nom et prénom (probablement une chaîne de caractères)
-    nometprenom: string;
-
-    // Nom et prénom en caractères arabes (probablement une chaîne de caractères)
-    nometprenomarab: string;
-
-    // Statut actif ou inactif (probablement une chaîne de caractères)
-    actifornot: string;
-
-    // Date de recrutement (probablement un objet Date)
-    dterecrutemnt: Date;
-
-    // Date de titularisation (probablement un objet Date)
-    dtetitularisation: Date;
-
-    // Date de départ (probablement un objet Date, ou null si toujours employé)
-    dtedepart: Date;
-
-    // Statut d'emploi (probablement une chaîne de caractères)
-    statusemp: string;
-
-    // Numéro de téléphone (probablement une chaîne de caractères)
-    tlphone: string;
-
-    // Adresse du personnel (probablement une chaîne de caractères)
-    adressemp: string;
-
-    // Date de début du contrat (probablement un objet Date)
-    debutcntrat: Date;
-
-    // Date de fin du contrat (probablement un objet Date, ou null si indéterminé)
-    fincntrat: Date;
-
-    // Date de naissance (probablement un objet Date)
-    dtenaiss: Date;
-
-    // Lieu de naissance (probablement une chaîne de caractères)
-    lieunaiss: string;
-
-    // Nom de la banque (probablement une chaîne de caractères)
-    bank: string;
-
-    // Code banque (probablement une chaîne de caractères)
-    codbank: string;
-
-    // Numéro de compte (probablement une chaîne de caractères)
-    numrocpte: string;
-
-    // RIB (probablement une chaîne de caractères, si applicable)
-    clerib: string;
-
-    // Indique si détaché du ministère d'origine (probablement une chaîne de caractères)
-    detacher: string;
-
-    // Ministère d'origine (probablement une chaîne de caractères, si applicable)
-    ministereorigine: string;
-
-    // Type d'éducation (probablement une chaîne de caractères)
-    Typeeducation: string;
+     // Matricule du personnel (probablement une chaîne de caractères)
+     matricule: string;
+ 
+     // Numéro d'identification nationale (probablement une chaîne de caractères)
+     nni: string;
+ 
+     // Nom et prénom  (probablement une chaîne de caractères)
+     nomPrenom: string;
+ 
+     // Nom et prénom en caractères arabes (probablement une chaîne de caractères)
+     nomPrenomArab: string;
+ 
+     // Statut actif ou inactif (probablement une chaîne de caractères)
+     actiformot: string;
+ 
+     // Date de recrutement (probablement un objet Date)
+     dteRecrutement: Date;
+ 
+     // Date de titularisation (probablement un objet Date)
+     dteTitularisation: Date;
+ 
+     // Date de départ (probablement un objet Date, ou null si toujours employé)
+     dtedepart: Date;
+ 
+     // Statut d'emploi (probablement une chaîne de caractères)
+     statusEmp: string;
+ 
+     // Numéro de téléphone (probablement une chaîne de caractères)
+     tlphone: string;
+ 
+     // Adresse du personnel (probablement une chaîne de caractères)
+     adressemp: string;
+ 
+     // Date de début du contrat (probablement un objet Date)
+     debuCntrat: Date;
+ 
+     // Date de fin du contrat (probablement un objet Date, ou null si indéterminé)
+     finCntrat: Date;
+ 
+     // Date de naissance (probablement un objet Date)
+     dateNaiss: Date;
+ 
+     // Lieu de naissance (probablement une chaîne de caractères)
+     lieuNaiss: string;
+ 
+     // Nom de la banque (probablement une chaîne de caractères)
+     bank: string;
+ 
+     // Code banque (probablement une chaîne de caractères)
+     codeBank: string;
+ 
+     // Numéro de compte (probablement une chaîne de caractères)
+     numroCpte: string;
+ 
+     // RIB (probablement une chaîne de caractères, si applicable)
+     cleRib: string;
+ 
+     // Indique si détaché du ministère d'origine (probablement une chaîne de caractères)
+     detacher: string;
+ 
+     // Ministère d'origine (probablement une chaîne de caractères, si applicable)
+     ministerOrigine: string;
+ 
+     // Type d'éducation (probablement une chaîne de caractères)
+     typeEducation: string;
 }
 
 export interface PersonnelResponse {
@@ -108,25 +108,25 @@ export interface PersonnelResponse {
     nni: string;
 
     // Nom et prénom  (probablement une chaîne de caractères)
-    nometprenom: string;
+    nomPrenom: string;
 
     // Nom et prénom en caractères arabes (probablement une chaîne de caractères)
-    nometprenomarab: string;
+    nomPrenomArab: string;
 
     // Statut actif ou inactif (probablement une chaîne de caractères)
-    actifornot: string;
+    actiformot: string;
 
     // Date de recrutement (probablement un objet Date)
-    dterecrutemnt: Date;
+    dteRecrutement: Date;
 
     // Date de titularisation (probablement un objet Date)
-    dtetitularisation: Date;
+    dteTitularisation: Date;
 
     // Date de départ (probablement un objet Date, ou null si toujours employé)
     dtedepart: Date;
 
     // Statut d'emploi (probablement une chaîne de caractères)
-    statusemp: string;
+    statusEmp: string;
 
     // Numéro de téléphone (probablement une chaîne de caractères)
     tlphone: string;
@@ -135,37 +135,37 @@ export interface PersonnelResponse {
     adressemp: string;
 
     // Date de début du contrat (probablement un objet Date)
-    debutcntrat: Date;
+    debuCntrat: Date;
 
     // Date de fin du contrat (probablement un objet Date, ou null si indéterminé)
-    fincntrat: Date;
+    finCntrat: Date;
 
     // Date de naissance (probablement un objet Date)
-    dtenaiss: Date;
+    dateNaiss: Date;
 
     // Lieu de naissance (probablement une chaîne de caractères)
-    lieunaiss: string;
+    lieuNaiss: string;
 
     // Nom de la banque (probablement une chaîne de caractères)
     bank: string;
 
     // Code banque (probablement une chaîne de caractères)
-    codbank: string;
+    codeBank: string;
 
     // Numéro de compte (probablement une chaîne de caractères)
-    numrocpte: string;
+    numroCpte: string;
 
     // RIB (probablement une chaîne de caractères, si applicable)
-    clerib: string;
+    cleRib: string;
 
     // Indique si détaché du ministère d'origine (probablement une chaîne de caractères)
     detacher: string;
 
     // Ministère d'origine (probablement une chaîne de caractères, si applicable)
-    ministereorigine: string;
+    ministerOrigine: string;
 
     // Type d'éducation (probablement une chaîne de caractères)
-    Typeeducation: string;
+    typeEducation: string;
 }
 
 export interface Dossier {
@@ -179,27 +179,27 @@ export interface Dossier {
 
 // Personnel model on database
 export interface Personnel{
-    IDagent: bigint;
-    matricul: string;
-    dtetitularisation: Date;
-    dtesortie: Date;
-    statusemp: string;
+    idAgent: bigint;
+    matricule: string;
+    dteTitularisation: Date;
+    dteSortie: Date;
+    statusEmp: string;
     tlphone: string;
-    adrssemp: string;
-    debucntrat: Date;
-    fincntrat: Date;
-    nometprenom: string;
-    datenaiss: string;
-    actifornot: boolean;
+    adrssEmp: string;
+    debuCntrat: Date;
+    finCntrat: Date;
+    nomPrenom: string;
+    dateNaiss: string;
+    actiformot: boolean;
     nni: string;
     bank: string;
-    numrocpte: string;
-    lieunaiss: string;
-    Typeeducation: string;
-    dterecrutmnt: Date;
+    numroCpte: string;
+    lieuNaiss: string;
+    typeEducation: string;
+    dteRecrutement: Date;
     detacher: string;
-    ministerorigne: string;
-    clerib: string;
-    codbank: string;
-    nometprenomarab: string;
+    ministerOrigine: string;
+    cleRib: string;
+    codeBank: string;
+    nomPrenomArab: string;
 }
