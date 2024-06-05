@@ -1,0 +1,87 @@
+<!-- Toolbar start pour affcicher les boutons des differentes actions realisable dans la gestion des couriels-->
+<p-card  styleClass="mb-5">
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <!--        Button d'ajout d'un couriel -->
+                <button
+                    pButton
+                    pRipple
+                    label="Ajouter"
+                    icon="pi pi-plus"
+                    class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mr-2"
+                    (click)="showForm()"
+                ></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <h4>Gestion du couriel</h4>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</p-card>
+<!-- Toolbar end-->
+
+<!-- Table start-->
+<p-card>
+    <!--  Tableau d'affichage de la liste du personnel -->
+    <p-table
+        [columns]="cols"
+        [value]="listCouriels$"
+        #dt1
+        dataKey="id"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+        [paginator]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        [rowsPerPageOptions]="[5,10, 20]"
+        tableStyleClass="p-datatable-gridlines"
+        [globalFilterFields]="['libelle','type','source','categorie','designation','ventilation','dateVentilation','object','numDoc','annotation','se','dateCouriel']"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter placeholder="Recherche..." class="w-full"/>
+						</span>
+            </div>
+        </ng-template>
+        <ng-template let-columns pTemplate="header">
+            <tr>
+                @for (col of columns; track col.field) {
+                    <th
+                        style="min-width: 15rem"
+                        [pSortableColumn]="col.field"
+                        class="font-weight-bold"
+                    >
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                }
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-couriel>
+            <tr>
+                <td>{{couriel.libelle}}</td>
+                <td>{{couriel.type}}</td>
+                <td>{{couriel.source}}</td>
+                <td>{{couriel.sens}}</td>
+                <td>{{couriel.categorie}}</td>
+                <td>{{couriel.observation}}</td>
+                <td>{{couriel.designation}}</td>
+                <td>{{couriel.ventilation}}</td>
+                <td>{{couriel.dateVentilation | date}}</td>
+                <td>{{couriel.object}}</td>
+                <td>{{couriel.numDoc}}</td>
+                <td>{{couriel.annotation}}</td>
+                <td>{{couriel.se}}</td>
+                <td>{{couriel.dateCouriel | date}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

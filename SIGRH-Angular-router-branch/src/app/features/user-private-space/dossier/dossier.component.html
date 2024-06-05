@@ -1,0 +1,109 @@
+<div>
+    <!--        Bouton ajout dossier -->
+    <button pButton=""
+            pRipple=""
+            label="Dossier"
+            icon="pi pi-plus"
+            class="p-element p-ripple p-button-outlined p-button-primary p-button p-component m-3"
+            (click)="showForm()"
+    >
+    </button>
+    <p-table
+        [columns]="cols"
+        [value]="lisDossiers$"
+        #dt1
+        dataKey="id"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+        [paginator]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        [rowsPerPageOptions]="[5,10]"
+        tableStyleClass="p-datatable-gridlines"
+    >
+        <ng-template let-columns pTemplate="header">
+            <tr>
+                @for (col of columns; track col.field) {
+                    <th
+                        style="min-width: 15rem"
+                        [pSortableColumn]="col.field"
+                        class="font-weight-bold"
+                    >
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                }
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dossier>
+            <tr>
+                <td>{{ dossier.nom }}</td>
+                <td>{{ dossier.date  | date }}</td>
+                <td>{{ dossier.observation }}</td>
+                <td>Image</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<!-- Formulaire d'ajout de dossier au personnel -->
+<p-dialog
+    [(visible)]="showDialog"
+    [style]="{ width: '40vw'}"
+    header="Dossier Formulaire"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label class="font-medium text-900">Matricule</label>
+            <input
+                type="text"
+                pInputText
+                [value]="personnel.matricule"
+                required
+                autofocus
+                disabled/>
+        </div>
+        <div class="field">
+            <label class="font-medium text-900">Nom Prenom</label>
+            <input
+                type="text"
+                pInputText
+                [value]="personnel.nometprenom"
+                required
+                autofocus
+                disabled/>
+        </div>
+        <div class="field">
+            <label class="font-medium text-900">NNI</label>
+            <input
+                type="text"
+                pInputText
+                [value]="personnel.nni"
+                required
+                autofocus
+                disabled
+            />
+        </div>
+        <div class="field">
+            <label class="font-medium text-900">Dossier</label>
+            <p-fileUpload
+                mode="basic"
+                name="avatar"
+                url="./upload.php"
+                accept="image/*"
+                [maxFileSize]="1000000"
+                styleClass="p-button-outlined p-button-plain w-full"
+                chooseLabel="Choisir un fichier"></p-fileUpload>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple class="p-button-primary flex-1" label="Enregistrer" icon="pi pi-fw pi-check"></button>
+        <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Annuler" icon="pi pi-fw pi-times"></button>
+    </ng-template>
+</p-dialog>

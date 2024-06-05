@@ -1,0 +1,217 @@
+<div>
+    <button pButton=""
+            pRipple=""
+            label="Affectation"
+            icon="pi pi-plus"
+            class="p-element p-ripple p-button-outlined p-button-primary p-button p-component m-3"
+            (click)="showForm()"
+    >
+    </button>
+    <p-card>
+        <p-table
+            [columns]="cols"
+            [value]="listAffections$"
+            #dt1
+            dataKey="id"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+            [paginator]="true"
+            styleClass="p-datatable-gridlines p-datatable-striped"
+            responsiveLayout="scroll"
+            [rowHover]="true"
+            [rowsPerPageOptions]="[5,10]"
+            tableStyleClass="p-datatable-gridlines"
+        >
+            <ng-template let-columns pTemplate="header">
+                <tr>
+                    @for (col of columns; track col.field) {
+                        <th
+                            style="min-width: 15rem"
+                            [pSortableColumn]="col.field"
+                            class="font-weight-bold"
+                        >
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    }
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-mobilite>
+                <tr>
+                    <td>{{mobilite.matricule}}</td>
+                    <td>{{mobilite.nometprenom}}</td>
+                    <td>{{mobilite.nature}}</td>
+                    <td>{{mobilite.dren}}</td>
+                    <td>{{mobilite.localite}}</td>
+                    <td>{{mobilite.moughataa}}</td>
+                    <td>{{mobilite.ecole}}</td>
+                    <td>{{mobilite.notepedagogique}}</td>
+                    <td>{{mobilite.dateEffet |date}}</td>
+                    <td>
+                        <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                        <button
+                            pButton
+                            type="button"
+                            pTooltip="Modifier"
+                            tooltipPosition="top"
+                            pRipple
+                            icon="pi pi-pencil"
+                            class="p-button-rounded p-button-primary mx-2"
+                            iconPos="left"
+                        ></button>
+                    </td>
+                    <td>
+                        <!--          Bouton qui fait la validation de l'avancement  -->
+                        <button
+                            pButton
+                            type="button"
+                            pTooltip="Valider"
+                            tooltipPosition="top"
+                            pRipple
+                            icon="pi pi-check-circle"
+                            class="p-button-rounded p-button-warning mx-2"
+                            iconPos="left"
+                        ></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+
+
+<!--  Formulaire Affectation -->
+<p-dialog
+    [(visible)]="showDialog"
+    [style]="{ width: '50vw'}"
+    header="Dossier Formulaire"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+    <div class="container">
+        <form [formGroup]="formAffection">
+            <div class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="matricule">Matricule</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="matricule"
+                        [value]="personnel.matricule"
+                        disabled
+                        autofocus
+                    />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="fullName">Nom Prenom</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="fullName"
+                        [value]="personnel.nometprenom"
+                        disabled
+                        autofocus
+                    />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="raison">Nature</label>
+                    <p-dropdown
+                        [options]="nature"
+                        id="raison"
+                        formControlName="nature"
+                        placeholder="Selectionner la raison"
+                    >
+                    </p-dropdown>
+                    <app-form-validators [entityField]="'nature'" [formGroup]="formAffection" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="localite">Localite</label>
+                    <p-dropdown
+                        id="localite"
+                        formControlName="localite"
+                        placeholder="Selectionner la localite"
+                    >
+                    </p-dropdown>
+                    <app-form-validators [entityField]="'localite'" [formGroup]="formAffection" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="moughataa">Moughataa</label>
+                    <input
+                        type="text"
+                        id="moughataa"
+                        formControlName="moughataa"
+                        pInputText
+                        required
+                        autofocus
+                    />
+                    <app-form-validators [entityField]="'moughataa'" [formGroup]="formAffection" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="ecole">Ecole</label>
+                    <p-dropdown
+                        id="ecole"
+                        formControlName="ecole"
+                        placeholder="Selectionner l'ecole"
+                    >
+                    </p-dropdown>
+                    <app-form-validators [entityField]="'ecole'" [formGroup]="formAffection"/>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="notepedagogique">Note pedagogique</label>
+                    <p-inputNumber
+                           id="notepedagogique"
+                           formControlName="notepedagogique"
+                           [showButtons]="true"
+                           inputId="min-buttons"
+                           [useGrouping]="false"
+                           [min]="0"
+                    />
+                    <app-form-validators [entityField]="'notepedagogique'" [formGroup]="formAffection" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="dateEffet"> Date Effet</label>
+                    <input
+                        type="date"
+                        id="dateEffet"
+                        formControlName="dateEffet"
+                        pInputText
+                        required
+                        autofocus
+                    />
+                    <!--                <p-calendar-->
+                    <!--                    id="dateEffet"-->
+                    <!--                    [dateFormat]="'yy-mm-dd'"-->
+                    <!--                    placeholder="entrez une data (yyyy-mm-dd)"-->
+                    <!--                    formControlName="dateEffet"-->
+                    <!--                    [readonlyInput]="true"-->
+                    <!--                    styleClass="mb-1"-->
+                    <!--                />-->
+                    <app-form-validators [entityField]="'dateEffet'" [formGroup]="formAffection" />
+                </div>
+                <div class="field col-12 ">
+                    <label for="dren">DREN</label>
+                    <input
+                        type="text"
+                        id="dren"
+                        pInputText
+                        formControlName="dren"
+                        required
+                        autofocus
+                    />
+                    <app-form-validators [entityField]="'dren'" [formGroup]="formAffection" />
+                </div>
+            </div>
+        </form>
+    </div>
+    </ng-template>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple class="p-button-primary flex-1" label="Enregistrer" icon="pi pi-fw pi-check"></button>
+            <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Annuler" icon="pi pi-fw pi-times"></button>
+        </ng-template>
+</p-dialog>

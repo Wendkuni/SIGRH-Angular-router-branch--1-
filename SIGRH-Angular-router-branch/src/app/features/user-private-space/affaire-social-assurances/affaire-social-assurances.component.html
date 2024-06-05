@@ -1,0 +1,181 @@
+<!-- Toolbar start pour affcicher les boutons des differentes actions realisable dans la gestion des assurances-->
+<p-card  styleClass="mb-5">
+  <p-toolbar>
+    <ng-template pTemplate="right">
+      <div class="my-2">
+        <!--        Button d'ajout d'une assurance ou d'une affaire social-->
+        <button
+          pButton
+          pRipple
+          label="Ajouter"
+          icon="pi pi-plus"
+          class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mr-2"
+          (click)="showAssuranceForm()"
+        ></button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="left">
+      <div class="my-2">
+        <h4>Gestion assurance</h4>
+      </div>
+    </ng-template>
+  </p-toolbar>
+</p-card>
+<!-- Toolbar end-->
+
+<!-- Table start-->
+<p-card>
+  <!--  Tableau d'affichage de la liste du personnel -->
+  <p-table
+    [columns]="cols"
+    [value]="(listAssurances$ | async)!"
+    #dt1
+    dataKey="id"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+    [paginator]="true"
+    styleClass="p-datatable-gridlines p-datatable-striped"
+    responsiveLayout="scroll"
+    [rowHover]="true"
+    [rowsPerPageOptions]="[5,10, 20]"
+    tableStyleClass="p-datatable-gridlines"
+    [globalFilterFields]="['matricule','nometprenom','designation','dateDebut','dateFin','etat','nombredepersonne','type']"
+  >
+      <ng-template pTemplate="caption">
+          <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Recherche..." class="w-full"/>
+						</span>
+          </div>
+      </ng-template>
+    <ng-template let-columns pTemplate="header">
+      <tr>
+        @for (col of columns; track col.field) {
+          <th
+            style="min-width: 15rem"
+            [pSortableColumn]="col.field"
+            class="font-weight-bold"
+          >
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+        }
+          <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-assurance>
+      <tr>
+        <td>{{ assurance.matricule }}</td>
+        <td>{{ assurance.nometprenom }}</td>
+        <td>{{ assurance.designation }}</td>
+        <td>{{ assurance.dateDebut }}</td>
+        <td>{{ assurance.dateFin }}</td>
+        <td>{{ assurance.etat }}</td>
+        <td>{{ assurance.nombredepersonne }}</td>
+        <td>{{ assurance.type }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            tooltipPosition="top"
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-primary mx-2"
+            pTooltip="Modifier"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+<!-- Table end-->
+
+<p-dialog
+  [(visible)]="assuranceFormVisibility"
+  [style]="{ width: '50vw'}"
+  header="Assurance Formulaire"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="p-fluid h-auto"
+>
+  <ng-template pTemplate="content">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12 ">
+        <label for="matricule">Matricule</label>
+        <input
+          type="text"
+          pInputText
+          id="matricule"
+          required
+          autofocus />
+      </div>
+      <div class="field col-12 ">
+        <label for="fullName">Nom Prenom</label>
+        <input
+          type="text"
+          pInputText
+          id="fullName"
+          required
+          autofocus />
+      </div>
+      <div class="field col-12 md:col-6">
+        <label >Date debut</label>
+        <p-calendar
+          [readonlyInput]="true"
+          styleClass="mb-1"
+          appendTo="body"
+          selectionMode="range"
+          dateFormat="yy-mm-dd"
+          [showTime]="false"
+          inputId="start"
+          placeholder="Date "
+        />
+      </div>
+      <div class="field col-12 md:col-6">
+        <label >Date fin</label>
+        <p-calendar
+          styleClass="mb-1"
+          [readonlyInput]="true"
+          appendTo="body"
+          selectionMode="range"
+          dateFormat="yy-mm-dd"
+          [showTime]="false"
+          inputId="start"
+          placeholder="Date "
+        />
+      </div>
+      <div class="field col-12 ">
+        <label for="etat">Etat</label>
+        <p-dropdown
+          id="etat"
+          placeholder="Selectionner l'etat"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 ">
+        <label for="type">Type</label>
+        <p-dropdown
+          id="type"
+          placeholder="Selectionner l'etat"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 ">
+        <label>Nombre de personne</label>
+        <p-inputNumber
+          mode="decimal"
+          [showButtons]="true"
+          inputId="min-buttons"
+          [min]="1"
+          [useGrouping]="false"/>
+      </div>
+    </div>
+  </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple class="p-button-primary flex-1" label="Enregistrer" icon="pi pi-fw pi-check"></button>
+        <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Annuler" icon="pi pi-fw pi-times"></button>
+    </ng-template>
+</p-dialog>

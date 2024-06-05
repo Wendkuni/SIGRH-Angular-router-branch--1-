@@ -1,0 +1,215 @@
+<p-card styleClass="mb-5">
+    <p-toolbar >
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <!--        Button d'ajout d'un fonction-->
+                <button
+                    pButton
+                    pRipple
+                    label="Ajouter"
+                    icon="pi pi-plus"
+                    class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mr-2"
+                    (click)="showDialog()"
+                ></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <h4>Gestion Fonction agent</h4>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</p-card>
+
+
+<p-card>
+    <p-table
+        [columns]="cols"
+        [value]="(listFonctionAgent$ | async)!"
+        #dt1
+        dataKey="id"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+        [paginator]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        [rowsPerPageOptions]="[5,10]"
+        tableStyleClass="p-datatable-gridlines"
+        [globalFilterFields]="['fonction','fonctionenarabe','corps','grade','categorie','echelon','echelle','salairedebase']"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Recherche..." class="w-full"/>
+						</span>
+            </div>
+        </ng-template>
+        <ng-template let-columns pTemplate="header">
+            <tr>
+                @for (col of columns; track col.field) {
+                    <th
+                        style="min-width: 15rem"
+                        [pSortableColumn]="col.field"
+                        class="font-weight-bold"
+                    >
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                }
+                <th></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-fonction>
+            <tr>
+                <td>{{fonction.fonction}}</td>
+                <td>{{fonction.fonctionenarabe}}</td>
+                <td>{{fonction.corps}}</td>
+                <td>{{fonction.grade}}</td>
+                <td>{{fonction.categorie}}</td>
+                <td>{{fonction.echelon}}</td>
+                <td>{{fonction.echelle}}</td>
+                <td>{{fonction.indice}}</td>
+                <td>{{fonction.salairedebase}}</td>
+                <td>
+                    <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Modifier"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-primary mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+                <td>
+                    <!--          Button qui supprime la fonction A verifier si la possibilite doit etre donner -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Supprimer"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+
+<p-dialog
+    [(visible)]="fonctionAgentVisible"
+    [style]="{ width: '50vw'}"
+    header="Formulaire Fonction"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class ="p-fluid p-formgrid grid" >
+            <div class="field col-12 md:col-6">
+                <label>Fonction</label>
+                <input
+                    type="text"
+                    pInputText
+                    required
+                    autofocus />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label >Fonction en Arab</label>
+                <input
+                    type="text"
+                    pInputText
+                    required
+                    autofocus />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label >Corps</label>
+                <input
+                    type="text"
+                    pInputText
+                    required
+                    autofocus />
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label >Grade</label>
+                <p-dropdown
+                    placeholder="Selectionner le grade"
+                >
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label >Categorie</label>
+                <p-dropdown
+                    placeholder="Selectionner la categorie"
+                >
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label >Echelle</label>
+                <p-dropdown
+                    placeholder="Selectionner l'echelle"
+                >
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label >Echelon</label>
+                <p-dropdown
+                    placeholder="Selectionner l'echelon"
+                >
+                </p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label >Salaire de base</label>
+                <p-inputNumber
+                    mode="reel"
+                    [showButtons]="true"
+                    inputId="min-buttons"
+                    [min]="0"
+                    [useGrouping]="false"/>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label >Indice</label>
+                <p-inputNumber
+                    mode="reel"
+                    [showButtons]="true"
+                    inputId="min-buttons"
+                    [min]="0"
+                    [useGrouping]="false"/>
+            </div>
+        </div>
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button
+            pRipple
+            label="Save"
+            icon="pi pi-check"
+            severity="success"
+            [text]="true"
+        />
+        <p-button
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            severity="danger"
+            [text]="true"
+        />
+    </ng-template>
+</p-dialog>
+

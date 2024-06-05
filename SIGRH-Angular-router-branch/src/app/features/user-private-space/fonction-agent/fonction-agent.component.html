@@ -1,0 +1,201 @@
+<span class="block text-900 font-bold text-xl mb-4">Fonction</span>
+<div class="grid">
+    <div class="col-12 lg:col-5">
+        <form [formGroup]="fonctionAgentForm">
+            <div class="border-1 surface-border border-round p-fluid mb-4">
+                <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Fonction Agent</span>
+                <div class="p-3">
+                    <div class="field">
+                        <label for="matricule">Matricule</label>
+                        <input
+                            type="text"
+                            pInputText
+                            id="matricule"
+                            [value]="personnel.matricule"
+                            required
+                            autofocus
+                            disabled/>
+                    </div>
+                    <div class="field">
+                        <label for="fullName">Nom Prenom</label>
+                        <input
+                            type="text"
+                            pInputText
+                            id="fullName"
+                            [value]="personnel.nometprenom"
+                            required
+                            autofocus
+                            disabled/>
+                    </div>
+                    <div class="field">
+                        <label>Nature</label>
+                        <p-dropdown
+                            formControlName="nature"
+                            [options]="nature"
+                            placeholder="Selectionner la nature"
+                        >
+                        </p-dropdown>
+                        <app-form-validators [entityField]="'nature'"
+                                             [formGroup]="fonctionAgentForm"></app-form-validators>
+                    </div>
+                    <div class="field">
+                        <label> Date Effet</label>
+                        <p-calendar
+                            formControlName="dateEffet"
+                            [dateFormat]="'yy-mm-dd'"
+                            [showButtonBar]="true"
+                            [firstDayOfWeek]="1"
+                            [readonlyInput]="true"
+                            styleClass="mb-1"
+                        />
+                        <app-form-validators [entityField]="'dateEffet'"
+                                             [formGroup]="fonctionAgentForm"></app-form-validators>
+                    </div>
+                </div>
+                <div class="border-1 surface-border border-round p-fluid m-2">
+                    <span class="text-900 font-bold block  border-bottom-1 surface-border p-3">INCIDENCE, GRADE, ECHELLE ET ECHELLON</span>
+                    <div class="p-3">
+                        <div class="field">
+                            <label for="corps">CORPS</label>
+                            <p-dropdown
+                                id="corps"
+                                placeholder="Selectionner la nature"
+                                formControlName="corps"
+                            >
+                            </p-dropdown>
+                            <app-form-validators [entityField]="'corps'"
+                                                 [formGroup]="fonctionAgentForm"></app-form-validators>
+                        </div>
+                        <div class="field">
+                            <label for="fonction">Fonction</label>
+                            <p-dropdown
+                                id="fonction"
+                                placeholder="Selectionner la fonction"
+                                formControlName="fonction"
+                            >
+                            </p-dropdown>
+                            <app-form-validators [entityField]="'fonction'"
+                                                 [formGroup]="fonctionAgentForm"></app-form-validators>
+                        </div>
+                        <div class="field">
+                            <label for="grade">Grade</label>
+                            <p-dropdown
+                                id="grade"
+                                placeholder="Selectionner le grade"
+                                formControlName="grade"
+                            >
+                            </p-dropdown>
+                            <app-form-validators [entityField]="'grade'"
+                                                 [formGroup]="fonctionAgentForm"></app-form-validators>
+                        </div>
+                        <div class="field ">
+                            <label for="echelle">Echelle</label>
+                            <p-dropdown
+                                id="echelle"
+                                placeholder="Selectionner l'echelle"
+                                formControlName="echelle"
+                            >
+                            </p-dropdown>
+                            <app-form-validators [entityField]="'echelle'"
+                                                 [formGroup]="fonctionAgentForm"></app-form-validators>
+                        </div>
+                        <div class="field ">
+                            <label for="echellon">Echellon</label>
+                            <p-dropdown
+                                id="echellon"
+                                placeholder="Selectionner l'echellon"
+                                formControlName="echellon"
+                            >
+                            </p-dropdown>
+                            <app-form-validators [entityField]="'echellon'"
+                                                 [formGroup]="fonctionAgentForm"></app-form-validators>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-content-between gap-3">
+                <button pButton pRipple class="p-button-primary flex-1" label="Enregistrer"
+                        icon="pi pi-fw pi-check"></button>
+                <button pButton pRipple
+                        class="p-button-danger flex-1 p-button-outlined"
+                        label="Annuler" icon="pi pi-fw pi-times"
+                        (click)="cancel()"
+                ></button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="col-12 lg:col-7">
+        <p-table
+            [columns]="cols"
+            [value]="listAvancement$"
+            #dt1
+            dataKey="id"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+            [paginator]="true"
+            styleClass="p-datatable-gridlines p-datatable-striped"
+            responsiveLayout="scroll"
+            [rowHover]="true"
+            [rowsPerPageOptions]="[5,10]"
+            tableStyleClass="p-datatable-gridlines"
+        >
+            <ng-template let-columns pTemplate="header">
+                <tr>
+                    @for (col of columns; track col.field) {
+                        <th
+                            style="min-width: 15rem"
+                            [pSortableColumn]="col.field"
+                            class="font-weight-bold"
+                        >
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    }
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-avancement>
+                <tr>
+                    <td>{{ avancement.fonction }}</td>
+                    <td>{{ avancement.dateEffet  | uppercase }}</td>
+                    <td>{{ avancement.corps }}</td>
+                    <td>{{ avancement.grade }}</td>
+                    <td>{{ avancement.echelle }}</td>
+                    <td>{{ avancement.echellon }}</td>
+                    <td>{{ avancement.indice }}</td>
+                    <td>
+                        <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                        <button
+                            pButton
+                            type="button"
+                            pTooltip="Modifier"
+                            tooltipPosition="top"
+                            pRipple
+                            icon="pi pi-pencil"
+                            class="p-button-rounded p-button-primary mx-2"
+                            iconPos="left"
+                            (click)="patchForm(avancement)"
+                        ></button>
+                    </td>
+                    <td>
+                        <!--          Bouton qui fait la validation de l'avancement  -->
+                        <button
+                            pButton
+                            type="button"
+                            pTooltip="Valider"
+                            tooltipPosition="top"
+                            pRipple
+                            icon="pi pi-check-circle"
+                            class="p-button-rounded p-button-warning mx-2"
+                            iconPos="left"
+                        ></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

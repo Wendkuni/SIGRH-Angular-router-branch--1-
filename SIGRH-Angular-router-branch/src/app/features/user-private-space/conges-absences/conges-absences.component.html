@@ -1,0 +1,275 @@
+  <p-toast />
+  <p-card styleClass="mb-5">
+    <p-toolbar styleClass="mb-1 gap-2">
+      <ng-template pTemplate="right">
+        <div class="my-2">
+          <!--        Button d'ajout d'une demande de conge ou d'absence -->
+          <button
+            pButton
+            pRipple
+            label="Ajouter"
+            icon="pi pi-plus"
+            class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mr-2"
+            (click)="showForm()"
+          ></button>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="left">
+        <div class="my-2">
+          <h4>Gestion des congés et des absences </h4>
+        </div>
+      </ng-template>
+    </p-toolbar>
+  </p-card>
+
+  <p-card>
+    <p-table
+      #dt
+      [rows]="10"
+      [value]="(listDemande$ | async)!"
+      [columns]="colNT"
+      [paginator]="true"
+      [tableStyle]="{ 'min-width': '75rem' }"
+      styleClass="p-datatable-gridlines p-datatable-striped"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+      [globalFilterFields]="['matricule','nometprenom','raison','autorisation','motif','signataire']"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt, $event)" placeholder="Recherche..." class="w-full"/>
+						</span>
+            </div>
+        </ng-template>
+      <ng-template let-columns pTemplate="header">
+        <tr>
+          @for (col of columns; track col.field) {
+            <th
+              style="min-width: 15rem"
+              [pSortableColumn]="col.field"
+              class="font-weight-bold"
+            >
+              {{ col.header }}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          }
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-dmd>
+        <tr>
+          <td> {{ dmd.matricule }}</td>
+          <td>{{ dmd.nometprenom }}</td>
+          <td> {{ dmd.raison }}</td>
+          <td> {{dmd.dateEffet | date}} </td>
+          <td> {{ dmd.intervalleConge }}</td>
+          <td>
+            <p-tag
+              [value]="dmd.autorisation"
+              [severity]="getStatusSeverity(dmd.autorisation)"
+            >
+            </p-tag>
+          </td>
+          <td>
+            @if(dmd.motif){
+              {{dmd.motif}}
+            } @else {
+              <div class="flex justify-content-center">-</div>
+            }
+          </td>
+          <td>
+            {{dmd.signataire}}
+          </td>
+            @if(dmd.autorisation === 'Demande en cours'){
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        pTooltip="Modifier"
+                        icon="pi pi-pencil"
+                        tooltipPosition="top"
+                        (click)="editDemande(dmd)"
+                        class="p-button-rounded p-button-outlined p-button-secondary mr-3"></button>
+                </td>
+                <td >
+                <button
+                    pButton
+                    pTooltip="Accorder"
+                    tooltipPosition="top"
+                    pRipple
+                    icon="pi pi-check-circle"
+                    class="p-button-rounded p-button-primary mx-2"
+                    iconPos="left"
+                    (click)="acceptDemande(dmd)"
+                ></button>
+
+                </td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        tooltipPosition="top"
+                        icon="pi pi-times"
+                        pTooltip="Refuser"
+                        class="p-button-rounded p-button-danger mx-2"
+                        (click)="rejectDemande(dmd)"
+                    ></button>
+                </td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        pTooltip="Annuler"
+                        icon="pi pi-times"
+                        tooltipPosition="left"
+                        class="p-button-rounded p-button-outlined p-button-secondary mr-3"
+                        (click)="cancelDemande(dmd)"
+                    ></button>
+                </td>
+            } @else if(dmd.autorisation === 'Demande acceptée'){
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        pTooltip="Annuler"
+                        icon="pi pi-times"
+                        tooltipPosition="left"
+                        class="p-button-rounded p-button-outlined p-button-secondary mr-3"
+                        (click)="cancelDemande(dmd)"
+                    ></button>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            } @else {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+
+
+<!--  Formulaire ajout ou modification -->
+
+  <p-dialog
+    [(visible)]="showFormVisibility"
+    [style]="{ width: '50vw', height: 'auto'}"
+    header="Conge Formulaire"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    cdk-scrollable
+    styleClass="p-fluid"
+  >
+    <ng-template pTemplate="content">
+        <form [formGroup]="formDemande">
+            @if(action === 'Add' || action === 'Edit'){
+                <div class="field">
+                    <label for="matricule">Matricule</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="matricule"
+                        placeholder="Matricule"
+                        formControlName="matricule"
+                        required
+                        autofocus />
+                    <app-form-validators [entityField]="'matricule'" [formGroup]="formDemande"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="raison">Raison</label>
+                    <p-dropdown
+                        [options]="raison"
+                        id="raison"
+                        formControlName="raison"
+                        [filter]="true"
+                        [showClear]="true"
+                        appendTo="body"
+                        placeholder="Selectionner la raison"
+                    >
+                        <app-form-validators [entityField]="'raison'" [formGroup]="formDemande"></app-form-validators>
+                    </p-dropdown>
+                </div>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="dateEffet">Date Effet</label>
+                        <p-calendar
+                            id="dateEffet"
+                            appendTo="body"
+                            selectionMode="range"
+                            dateFormat="yy-mm-dd"
+                            [showTime]="false"
+                            inputId="start"
+                            placeholder="Date Effet"
+                            styleClass="mb-1"
+                            formControlName="dateEffet"
+                        />
+                        <app-form-validators [entityField]="'dateEffet'" [formGroup]="formDemande"></app-form-validators>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="nombre_jr">Nombre de jours</label>
+                        <p-inputNumber
+                            mode="decimal"
+                            id="nombre_jr"
+                            [showButtons]="true"
+                            inputId="min-buttons"
+                            [min]="1"
+                            formControlName="nombrejr"
+                            [useGrouping]="false"/>
+                        <app-form-validators [entityField]="'nombrejr'" [formGroup]="formDemande"></app-form-validators>
+                    </div>
+                </div>
+            } @else {
+                <div class="field">
+                    <label for="signataire">Signataire</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="signataire"
+                        required
+                        formControlName="signataire"
+                        autofocus />
+                    <app-form-validators [entityField]="'signataire'" [formGroup]="formDemande"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="autorisation">Autorisation</label>
+                    <p-dropdown
+                        [options]="autorisation"
+                        id="autorisation"
+                        formControlName="autorisation"
+                        placeholder="Selectionner la reponse"
+                    />
+                    <app-form-validators [entityField]="'autorisation'" [formGroup]="formDemande"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="motif">Motif</label>
+                    <textarea id="motif" rows="5" cols="30" placeholder="Motif" pInputTextarea></textarea>
+                </div>
+            }
+        </form>
+
+    </ng-template>
+
+      <ng-template pTemplate="footer">
+      <button pButton pRipple class="p-button-primary flex-1" label="Enregistrer" icon="pi pi-fw pi-check"></button>
+      <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Annuler" icon="pi pi-fw pi-times"></button>
+      </ng-template>
+  </p-dialog>
+

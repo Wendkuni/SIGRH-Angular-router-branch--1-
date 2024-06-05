@@ -1,0 +1,41 @@
+<p-card  styleClass="mb-5">
+<!-- Entete presentation personnel-->
+    <div class="flex align-items-center border-bottom-1 surface-border p-3 lg:p-4 ">
+<!--      Image du personnel et son nom -->
+      <div class="relative flex align-items-center mr-3">
+          <img src="{{personnel.photo}}" alt="{{personnel.nometprenom}}" class="w-4rem h-4rem border-circle shadow-4">
+      </div>
+      <div class="mr-2">
+        <span class="font-semibold block">{{personnel.nometprenom}}</span>
+      </div>
+
+      <div class="flex align-items-center ml-auto">
+        <!--      Bouton de telechargement -->
+        <button pButton=""
+                pRipple=""
+                label="Télécharger"
+                icon="pi pi-print"
+                class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mx-1">
+        </button>
+      </div>
+    </div>
+
+      <p-tabView>
+        <p-tabPanel   header="Avancement">
+         <app-fonction-agent
+             [personnel]="personnel"
+         ></app-fonction-agent>
+        </p-tabPanel>
+        <p-tabPanel header="Dossier">
+       <app-dossier
+           [personnel]="personnel"
+       ></app-dossier>
+        </p-tabPanel>
+        <p-tabPanel header="Mobilite">
+            <app-affectation
+                [personnel]="personnel"
+            ></app-affectation>
+        </p-tabPanel>
+      </p-tabView>
+
+  </p-card>

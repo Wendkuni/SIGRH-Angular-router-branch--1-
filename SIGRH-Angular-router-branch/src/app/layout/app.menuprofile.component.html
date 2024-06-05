@@ -1,0 +1,39 @@
+<p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'"
+    [showTransformOptions]="'translateX(100%)'" />
+
+<div class="layout-menu-profile">
+    <button class="p-link border-noround" (click)="toggleMenu()" pTooltip="Profile" [tooltipDisabled]="isTooltipDisabled">
+        <img src="assets/layout/images/login/icon-login.svg" alt="avalon-ng" style="width: 52px; height: 52px;">
+        <span>
+            <strong>{{currentUser.name}}</strong>
+            <small>{{ currentUser.email }}</small>
+        </span>
+        <i class="layout-menu-profile-toggler pi pi-fw" [ngClass]="{'pi-angle-down': menuProfilePosition === 'start' || isHorizontal, 'pi-angle-up': menuProfilePosition === 'end' && !isHorizontal}"></i>
+    </button>
+
+    <ul *ngIf="menuProfileActive" [@menu]="isHorizontal ? 'overlay' : 'inline'">
+        <li pTooltip="Profile" [tooltipDisabled]="isTooltipDisabled">
+            <button class="p-link" [routerLink]="['/profile/list']">
+                <i class="pi pi-file-o pi-fw"></i>
+                <span>Profile</span>
+            </button>
+        </li>
+        <li pTooltip="Logout" [tooltipDisabled]="isTooltipDisabled" [routerLink]="['/auth/login2']">
+            <button class="p-link" (click)="confirm($event)">
+                <i class="pi pi-power-off pi-fw"></i>
+                <span>Logout</span>
+            </button>
+            <p-confirmPopup>
+                <ng-template pTemplate="content" let-message>
+                    <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
+                        <i [class]="message.icon" class="text-6xl text-primary-500"></i>
+                        <p>{{ message.message }}</p>
+                    </div>
+                </ng-template>
+            </p-confirmPopup>
+        </li>
+    </ul>
+</div>

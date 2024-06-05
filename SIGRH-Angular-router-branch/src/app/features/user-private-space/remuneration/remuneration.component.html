@@ -1,0 +1,248 @@
+<p-toast [life]="3000"></p-toast>
+
+<!-- Toolbar pour afficher les boutons des differentes actions realisable dans la gestion de la remuneration-->
+<p-card styleClass="mb-5">
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <!--        Button d'ajout-->
+                <button
+                    pButton
+                    pRipple
+                    label="Ajouter"
+                    icon="pi pi-plus"
+                    class="p-element p-ripple p-button-outlined p-button-primary p-button p-component mr-2"
+                    (click)="showFormDialog()"
+                ></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="left">
+            <div class="my-2">
+                <h4>Gestion de la remuneration</h4>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</p-card>
+
+
+<p-card>
+    <p-table
+        [columns]="cols"
+        #dt1
+        [value]="remunerations$"
+        dataKey="id"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Page {currentPage} sur {totalPages}"
+        [paginator]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        [rowsPerPageOptions]="[5,10, 20, 50]"
+        tableStyleClass="p-datatable-gridlines"
+        [globalFilterFields]="['fonction','matricule','nometprenom','corps','grade','echelon','echelle']"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
+                                   placeholder="Recherche..." class="w-full"/>
+						</span>
+            </div>
+        </ng-template>
+        <ng-template let-columns pTemplate="header">
+            <tr>
+                @for (col of columns; track col.field) {
+                    <th
+                        style="min-width: 15rem"
+                        [pSortableColumn]="col.field"
+                        class="font-weight-bold"
+                    >
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                }
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-remu>
+            <tr class="align-items-center">
+                <td> {{remu.nometprenom}} </td>
+                <td> {{remu.matricule}} </td>
+                <td> {{remu.fonction}} </td>
+                <td> {{remu.netapayer}} </td>
+                <td> {{remu.banquecompte}} </td>
+                <td> {{remu.date}} </td>
+                <td> {{remu.corps}} </td>
+                <td> {{remu.grade}} </td>
+                <td> {{remu.echelon}} </td>
+                <td> {{remu.echelle}} </td>
+                <td> {{remu.indice}} </td>
+                <td>
+                    <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Modifier"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-primary mx-2"
+                        iconPos="left"
+                        (click)="showEditFormDialog(remu)"
+                    ></button>
+                </td>
+                <td>
+                    <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Indemnités"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-refresh"
+                        class="p-button-rounded p-button-warning mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+                <td>
+                    <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Indemnités"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-dollar"
+                        class="p-button-rounded p-button-secondary mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+                <td>
+                    <!--          Bouton qui fait l'ouverture du formulaire de modification -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Indemnités"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-dollar"
+                        class="p-button-rounded p-button-info mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+                <td>
+                    <!--          Button qui supprime -->
+                    <button
+                        pButton
+                        type="button"
+                        pTooltip="Supprimer"
+                        tooltipPosition="top"
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger mx-2"
+                        iconPos="left"
+                    ></button>
+                </td>
+            </tr>
+
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">Aucun remuneration trouvé(e).</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+
+<p-dialog
+    header="Formulaire du personnel"
+    [(visible)]="formVisible"
+    (onHide)="close()"
+    [style]="{ width: '50vw' }"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    class="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class="container">
+            <form [formGroup]="remunerationForm">
+                    <div class="field">
+                        <label for="matricule">Matricule</label>
+                        <p-dropdown
+                            id="matricule"
+                            [filter]="true"
+                            [showClear]="true"
+                            appendTo="body"
+                            formControlName="matricule"
+                            placeholder="Selectionner le matricule"
+                        />
+                        <app-form-validators [entityField]="'matricule'" [formGroup]="remunerationForm"></app-form-validators>
+                    </div>
+                <div class="field">
+                    <label for="netapayer">Net à payer</label>
+                    <p-inputNumber
+                        id="netapayer"
+                        [min]="0"
+                        mode="decimal"
+                        formControlName="netapayer" />
+                    <app-form-validators [entityField]="'netapayer'" [formGroup]="remunerationForm"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="banque">Libelle Bank</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="banque"
+                        formControlName="banquecompte"
+                        required
+                        autofocus />
+                    <app-form-validators [entityField]="'banquecompte'" [formGroup]="remunerationForm"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="numCompte">Numero Compte</label>
+                    <p-inputNumber
+                        id="numCompte"
+                        [min]="0"
+                        mode="decimal"
+                        formControlName="numCompte" />
+                    <app-form-validators [entityField]="'numCompte'" [formGroup]="remunerationForm"></app-form-validators>
+                </div>
+                <div class="field">
+                    <label for="dateEffet">Date Effet</label>
+                    <p-calendar
+                        id="dateEffet"
+                        appendTo="body"
+                        selectionMode="range"
+                        dateFormat="yy-mm-dd"
+                        [showTime]="false"
+                        inputId="start"
+                        placeholder="Date Effet"
+                        styleClass="mb-1"
+                        formControlName="date"
+                    />
+                    <app-form-validators [entityField]="'date'" [formGroup]="remunerationForm"></app-form-validators>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple
+                class="p-button-primary flex-1"
+                label="Enregistrer"
+                icon="pi pi-fw pi-check"
+        >
+
+        </button>
+        <button pButton pRipple class="p-button-danger flex-1 p-button-outlined" label="Annuler"
+                icon="pi pi-fw pi-times" ></button>
+    </ng-template>
+</p-dialog>
